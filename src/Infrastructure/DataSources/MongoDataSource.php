@@ -58,9 +58,15 @@ final class MongoDataSource implements DataSourceInterface
         $raw      = $this->runRaw($definition, $pipeline);
 
         $facetResult = $raw[0] ?? [];
-        $rows        = array_map(
-            fn(array $doc) => $this->normalizeDocument($doc),
-            $facetResult['data'] ?? [],
+
+        $dataItems = $facetResult['data'] ?? [];
+        if ($dataItems instanceof \Traversable) {
+            $dataItems = iterator_to_array($dataItems);
+        }
+
+        $rows  = array_map(
+            fn($doc) => $this->normalizeDocument((array) $doc),
+            $dataItems,
         );
         $total = (int) ($facetResult['totalCount'][0]['count'] ?? 0);
 

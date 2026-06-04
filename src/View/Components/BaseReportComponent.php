@@ -87,4 +87,11 @@ abstract class BaseReportComponent extends Component
     {
         return 'dhr_' . substr(md5($this->report . static::class), 0, 8);
     }
+
+    // Prevent the raw $report string from overriding the resolved entity
+    // that each render() method passes to the view under the same key.
+    public function data(): array
+    {
+        return array_diff_key(parent::data(), ['report' => true]);
+    }
 }

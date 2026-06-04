@@ -42,8 +42,8 @@ header>*:not(.hero-bg):not(canvas){position:relative;z-index:2}
 .badge-hint{position:absolute;bottom:calc(100% + 14px);top:auto;right:50%;transform:translateX(50%) translateY(6px);width:360px;background:#1C2333;border:1px solid rgba(0,180,255,.25);border-radius:12px;padding:1rem 1.2rem;color:#CBD5E1;font-size:.82rem;line-height:1.7;text-align:right;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:20}
 .hint-arrow{position:absolute;bottom:-7px;right:50%;transform:translateX(50%) rotate(45deg);width:12px;height:12px;background:#1C2333;border-bottom:1px solid rgba(0,180,255,.25);border-right:1px solid rgba(0,180,255,.25)}
 .badge-hint strong{display:block;color:#00C8FF;margin-bottom:.3rem;font-size:.88rem}
-.badge-hint code{display:block;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.15);border-radius:6px;padding:.4rem .7rem;margin:.6rem 0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#FFFFFF;white-space:nowrap;overflow-x:auto;direction:ltr;text-align:left}
-.hint-open{display:block;color:#FFFFFF;font-size:.75rem;margin-top:.4rem;text-align:center;opacity:.7}
+.badge-hint code{display:block;background:#0d1a26;border:1px solid rgba(0,200,255,.2);border-radius:6px;padding:.4rem .7rem;margin:.6rem 0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#e2f0f8;white-space:nowrap;overflow-x:auto;direction:ltr;text-align:left}
+.hint-open{display:block;color:#8ab8cc;font-size:.75rem;margin-top:.4rem;text-align:center}
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,120,168,.08);border:1px solid rgba(0,120,168,.25);border-radius:100px;padding:.4rem 1.2rem;font-size:.78rem;letter-spacing:.05em;color:var(--cyan);margin-bottom:2rem;font-family:'JetBrains Mono',monospace;direction:ltr}
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
@@ -378,8 +378,12 @@ $query = DB::table('orders')
     <div class="feat-card reveal"><span class="feat-icon">🛡️</span><h3>Field-Level ACL</h3><p>Global Deny List + Role-Based Deny List مع Wildcard Patterns. الـ Fields المحظورة بتتشال تلقائياً.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📤</span><h3>3 Export Formats</h3><p>CSV (UTF-8 BOM Streaming)، XLSX (PhpSpreadsheet)، وJSON — كلهم Streamed للـ Client مباشرة بدون Temp Files.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">🏢</span><h3>Multi-tenant Ready</h3><p>Tenant ID بيتحط في كل Query تلقائياً. MySQL بياخد WHERE Clause، وMongoDB بياخد $match Stage — صفر كود إضافي.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🧩</span><h3>Blade Components أصلية</h3><p>ضمّن KPIs وCharts وTables وFilters في أي Blade Template بـ Tag واحد. Bootstrap وTailwind. RTL جاهز.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Livewire Integration</h3><p>اختياري — <code style="color:var(--cyan)">livewire:report-widget</code> بيضيف Real-time Filtering وSorting وPagination بدون أي JavaScript.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📊</span><h3>Dashboard و Widgets</h3><p>Domain Entities لـ Dashboards وWidgets (Table، Bar Chart، Line Chart، KPI Card، Heatmap). كل Widget مربوط بـ Report محفوظ.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📋</span><h3>Execution Audit Log</h3><p><code style="color:var(--cyan)">dhr_report_executions</code> بتسجّل كل Run: Execution Time، Rows، Memory، Cache Hit، Status.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🎨</span><h3>6 ثيمات للـ KPI Widget</h3><p><code style="color:var(--cyan)">variant="flat|gradient|dark|glass|minimal|bold"</code> — ثيمات CSS قابلة للتبديل اللحظي مع Color Picker وTransitions سلسة.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🍃</span><h3>MongoDB $facet Pipeline</h3><p>بيبني <code style="color:var(--cyan)">$match → $group → $project → $sort → $facet</code> تلقائياً — Data + totalCount في رحلة واحدة. BSONArray وObjectId بتتحوّل تلقائياً.</p></div>
   </div>
 </div>
 </section>
@@ -393,10 +397,52 @@ $query = DB::table('orders')
   <div class="reveal" style="margin-top:2rem">
     <div class="code-tabs">
       <button class="tab-btn active" onclick="showTab('facade')">Facade</button>
+      <button class="tab-btn" onclick="showTab('blade')">Blade Components</button>
       <button class="tab-btn" onclick="showTab('api')">REST API</button>
       <button class="tab-btn" onclick="showTab('adapter')">Custom Adapter</button>
       <button class="tab-btn" onclick="showTab('export')">Export</button>
     </div>
+
+    <div id="tab-blade" class="code-panel"><div class="code-block">
+<span class="cm">&lt;!-- KPI Cards — variant: flat | gradient | dark | glass | minimal | bold --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::kpi-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">:cols</span>=<span class="str">"3"</span>
+    <span class="str">color</span>=<span class="str">"#0077A8"</span>
+    <span class="str">variant</span>=<span class="str">"glass"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Chart.js مع SSR Table Fallback (بدون JS) --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">chart-type</span>=<span class="str">"bar"</span>
+    <span class="str">label-column</span>=<span class="str">"status"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+/&gt;
+
+<span class="cm">&lt;!-- MongoDB Pie Chart --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"demo-mongo-revenue-by-channel"</span>
+    <span class="str">chart-type</span>=<span class="str">"pie"</span>
+    <span class="str">label-column</span>=<span class="str">"channel"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Table + Filter + Export --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::report-filter</span> <span class="str">report</span>=<span class="str">"orders"</span> <span class="str">:inline</span>=<span class="str">"true"</span> /&gt;
+&lt;<span class="fn">x-reporting-engine::report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+    <span class="str">:per-page</span>=<span class="str">"15"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Livewire: Real-time Filter + Sort + Paginate --&gt;</span>
+&lt;<span class="fn">livewire:report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:per-page</span>=<span class="str">"20"</span>
+    <span class="str">:show-filters</span>=<span class="str">"true"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+/&gt;</div></div>
 
     <div id="tab-facade" class="code-panel active"><div class="code-block">
 <span class="cm">// نفّذ Report عبر الـ Facade — من أي مكان في التطبيق</span>
@@ -579,6 +625,10 @@ $query = DB::table('orders')
 <div><span class="t-prompt">$</span> <span class="t-cmd">composer require mostafax/dynamic-hybrid-reporting-engine</span></div>
 <div><span class="t-ok">  ✓ Package installed successfully</span></div>
 <div>&nbsp;</div>
+<div><span class="t-muted">  # مطلوب: Redis Client</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require predis/predis</span></div>
+<div><span class="t-ok">  ✓ predis/predis — Pure-PHP Redis Client</span></div>
+<div>&nbsp;</div>
 <div><span class="t-prompt">$</span> <span class="t-cmd">php artisan vendor:publish --tag=reporting-engine-config</span></div>
 <div><span class="t-ok">  ✓ Config published → config/reporting-engine.php</span></div>
 <div>&nbsp;</div>
@@ -591,9 +641,24 @@ $query = DB::table('orders')
 <div><span class="t-ok">  ✓ dhr_dashboards          created</span></div>
 <div><span class="t-ok">  ✓ dhr_widgets             created</span></div>
 <div>&nbsp;</div>
-<div><span class="t-muted">  # Optional: XLSX Export Support</span></div>
-<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet</span></div>
-<div><span class="t-ok">  ✓ Excel Export enabled</span></div>
+<div><span class="t-muted">  # اختياري: XLSX + Livewire</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet livewire/livewire</span></div>
+<div><span class="t-ok">  ✓ Excel Export + Livewire enabled</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # Demo Seeder — MySQL (80 orders) + MongoDB (120 events) + 5 تقارير</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">php artisan db:seed --class=ReportingEngineDemoSeeder</span></div>
+<div><span class="t-ok">  ✓ demo_orders seeded (80 rows — MySQL)</span></div>
+<div><span class="t-ok">  ✓ demo_events seeded (120 docs — MongoDB)</span></div>
+<div><span class="t-ok">  ✓ dhr_reports: 5 تقارير Demo محفوظة</span></div>
+<div><span class="t-ok">  ✓ Visit: /reporting-demo</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # KPI Widget — 6 ثيمات قابلة للتبديل:</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="flat"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="gradient" /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="dark"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="glass"    /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="minimal"  /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="bold"     /&gt;</span></div>
 <div>&nbsp;</div>
 <div><span class="t-muted">  # REST API جاهز الآن على:</span></div>
 <div><span class="t-info">  POST  /api/reporting/run          ← Ad-hoc Execution</span></div>
@@ -621,6 +686,8 @@ $query = DB::table('orders')
     <span style="color:var(--cyan)">✓ Multi-tenant</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--amber)">✓ CSV / XLSX / JSON</span>
+    <span style="color:var(--muted)">·</span>
+    <span style="color:var(--green)">✓ 6 ثيمات KPI (flat · gradient · dark · glass · minimal · bold)</span>
   </div>
 </footer>
 
@@ -633,7 +700,7 @@ $query = DB::table('orders')
   for(let i=0;i<60;i++) pts.push({x:Math.random()*2000,y:Math.random()*1000,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5,hue:Math.random()<.5?195:260,alpha:Math.random()*.4+.1});
   function draw(){
     ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},80%,45%,${p.alpha})`;ctx.fill()});
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W){p.vx*=-1}if(p.y<0||p.y>H){p.vy*=-1}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},80%,45%,${p.alpha})`;ctx.fill()});
     for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,120,180,${(1-d/120)*.08})`;ctx.lineWidth=.5;ctx.stroke()}}
     requestAnimationFrame(draw);
   }
@@ -641,9 +708,9 @@ $query = DB::table('orders')
 })();
 const revealObs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:.1});
 document.querySelectorAll('.reveal,.flow-step').forEach(el=>revealObs.observe(el));
-const counterObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,target=+el.dataset.target,start=+el.textContent,t0=performance.now();function step(now){const p=Math.min((now-t0)/1800,1),ease=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*ease);if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step);counterObs.unobserve(el)}),{threshold:.5});
+const counterObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting){return}const el=x.target,target=+el.dataset.target,start=+el.textContent,t0=performance.now();function step(now){const p=Math.min((now-t0)/1800,1),ease=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*ease);if(p<1){requestAnimationFrame(step)}}requestAnimationFrame(step);counterObs.unobserve(el)}),{threshold:.5});
 document.querySelectorAll('.metric-num[data-target]').forEach(el=>counterObs.observe(el));
-const barObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting)return;x.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',200));barObs.unobserve(x.target)}),{threshold:.3});
+const barObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting){return}x.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',200));barObs.unobserve(x.target)}),{threshold:.3});
 document.querySelectorAll('.perf-compare').forEach(el=>barObs.observe(el));
 function showTab(id){document.querySelectorAll('.code-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
 document.querySelectorAll('.feat-card').forEach(card=>card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')}));

@@ -26,6 +26,7 @@ final class KpiWidget extends BaseReportComponent
         bool    $showTitle = true,
         public readonly int $cols = 4,
         public readonly ?string $color = null,
+        public readonly string $variant = 'flat',
     ) {
         parent::__construct($execution, $repository, $report, $title, $theme, $perPage, $page, $showTitle);
     }
@@ -57,6 +58,7 @@ final class KpiWidget extends BaseReportComponent
             'kpis'          => $kpis,
             'cols'          => $this->cols,
             'color'         => $this->color,
+            'variant'       => $this->variant,
             'theme'         => $this->resolvedTheme(),
             'isRtl'         => $this->isRtl(),
             'widgetId'      => $this->widgetId(),

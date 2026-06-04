@@ -462,8 +462,12 @@ $query = DB::table('orders')
     <div class="feat-card reveal"><span class="feat-icon">🛡️</span><h3>Field-Level ACL</h3><p>Global deny list + per-role deny list with wildcard patterns. Denied fields are silently stripped; denied filter fields throw immediately.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📤</span><h3>3 Export Formats</h3><p>CSV (UTF-8 BOM streaming), XLSX (PhpSpreadsheet), and JSON — all streamed directly to the client, no temp file needed.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">🏢</span><h3>Multi-tenant Ready</h3><p>Tenant ID injected into every query automatically. MySQL gets a WHERE clause; MongoDB gets a $match stage — zero boilerplate.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🧩</span><h3>Native Blade Components</h3><p>Embed KPIs, charts, tables, filters, and export buttons in any Blade template with a single tag. Bootstrap &amp; Tailwind. RTL ready.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Livewire Integration</h3><p>Optional <code style="color:var(--cyan)">livewire:report-widget</code> adds real-time filtering, sorting, and pagination — zero JavaScript required.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📊</span><h3>Dashboard &amp; Widgets</h3><p>Domain entities for Dashboards and Widgets (table, bar chart, line chart, KPI card, heatmap). Each widget binds to a saved report.</p></div>
     <div class="feat-card reveal"><span class="feat-icon">📋</span><h3>Execution Audit Log</h3><p><code style="color:var(--cyan)">dhr_report_executions</code> records every run: ms, rows, memory, cache hit, status — full observability out of the box.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🎨</span><h3>6 KPI Visual Themes</h3><p><code style="color:var(--cyan)">variant="flat|gradient|dark|glass|minimal|bold"</code> — live-switchable CSS themes with smooth transitions and a color picker. Zero JS required.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🍃</span><h3>MongoDB $facet Pipeline</h3><p>Auto-built <code style="color:var(--cyan)">$match → $group → $project → $sort → $facet</code> — data + totalCount in one round-trip. BSONArray/ObjectId normalised automatically.</p></div>
   </div>
 </div>
 </section>
@@ -477,6 +481,7 @@ $query = DB::table('orders')
   <div class="reveal" style="margin-top:2rem">
     <div class="code-tabs">
       <button class="tab-btn active" onclick="showTab('facade')">Facade</button>
+      <button class="tab-btn" onclick="showTab('blade')">Blade</button>
       <button class="tab-btn" onclick="showTab('api')">REST API</button>
       <button class="tab-btn" onclick="showTab('adapter')">Custom Adapter</button>
       <button class="tab-btn" onclick="showTab('export')">Export</button>
@@ -513,6 +518,52 @@ $query = DB::table('orders')
 <span class="op">$result</span>->total;                     <span class="cm">// total count (without LIMIT)</span>
 <span class="op">$result</span>->metadata->executionTimeMs; <span class="cm">// e.g. 12.4</span>
 <span class="op">$result</span>->metadata->cacheHit;        <span class="cm">// true if served from Redis</span></div></div>
+
+    <div id="tab-blade" class="code-panel"><div class="code-block">
+<span class="cm">&lt;!-- KPI cards — variant: flat | gradient | dark | glass | minimal | bold --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::kpi-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">:cols</span>=<span class="str">"3"</span>
+    <span class="str">color</span>=<span class="str">"#0077A8"</span>
+    <span class="str">variant</span>=<span class="str">"glass"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Bar / line / pie chart — SSR table fallback (no-JS) --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">chart-type</span>=<span class="str">"bar"</span>
+    <span class="str">label-column</span>=<span class="str">"status"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+    <span class="str">:height</span>=<span class="str">"280"</span>
+/&gt;
+
+<span class="cm">&lt;!-- MongoDB pie chart --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"demo-mongo-revenue-by-channel"</span>
+    <span class="str">chart-type</span>=<span class="str">"pie"</span>
+    <span class="str">label-column</span>=<span class="str">"channel"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Table with filter form + export buttons --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::report-filter</span> <span class="str">report</span>=<span class="str">"orders"</span> <span class="str">:inline</span>=<span class="str">"true"</span> /&gt;
+&lt;<span class="fn">x-reporting-engine::report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+    <span class="str">:show-filters</span>=<span class="str">"false"</span>
+    <span class="str">:per-page</span>=<span class="str">"15"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Full saved dashboard --&gt;</span>
+&lt;<span class="fn">x-dashboard</span> <span class="str">slug</span>=<span class="str">"ceo-dashboard"</span> <span class="str">:cols</span>=<span class="str">"2"</span> /&gt;
+
+<span class="cm">&lt;!-- Livewire: real-time filter, sort, paginate --&gt;</span>
+&lt;<span class="fn">livewire:report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:per-page</span>=<span class="str">"20"</span>
+    <span class="str">:show-filters</span>=<span class="str">"true"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+/&gt;</div></div>
 
     <div id="tab-api" class="code-panel"><div class="code-block">
 <span class="cm">// POST /api/reporting/run — ad-hoc execution</span>
@@ -681,6 +732,10 @@ $query = DB::table('orders')
 <div><span class="t-prompt">$</span> <span class="t-cmd">composer require mostafax/dynamic-hybrid-reporting-engine</span></div>
 <div><span class="t-ok">  ✓ Package installed successfully</span></div>
 <div>&nbsp;</div>
+<div><span class="t-muted">  # Required: Redis client (choose one)</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require predis/predis</span></div>
+<div><span class="t-ok">  ✓ predis/predis — pure-PHP Redis client installed</span></div>
+<div>&nbsp;</div>
 <div><span class="t-prompt">$</span> <span class="t-cmd">php artisan vendor:publish --tag=reporting-engine-config</span></div>
 <div><span class="t-ok">  ✓ Config published → config/reporting-engine.php</span></div>
 <div>&nbsp;</div>
@@ -693,9 +748,30 @@ $query = DB::table('orders')
 <div><span class="t-ok">  ✓ dhr_dashboards          created</span></div>
 <div><span class="t-ok">  ✓ dhr_widgets             created</span></div>
 <div>&nbsp;</div>
-<div><span class="t-muted">  # Optional: XLSX export support</span></div>
-<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet</span></div>
-<div><span class="t-ok">  ✓ Excel export enabled</span></div>
+<div><span class="t-muted">  # Optional: XLSX export + Livewire real-time widgets</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet livewire/livewire</span></div>
+<div><span class="t-ok">  ✓ Excel export + Livewire enabled</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # Demo seeder — MySQL (80 orders) + MongoDB (120 events) + 5 saved reports</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">php artisan db:seed --class=ReportingEngineDemoSeeder</span></div>
+<div><span class="t-ok">  ✓ demo_orders seeded (80 rows — MySQL)</span></div>
+<div><span class="t-ok">  ✓ demo_events seeded (120 docs — MongoDB)</span></div>
+<div><span class="t-ok">  ✓ dhr_reports: 5 demo reports saved</span></div>
+<div><span class="t-ok">  ✓ Visit: /reporting-demo</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # KPI widget — 6 visual variants, live-switchable:</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="flat"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="gradient" /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="dark"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="glass"    /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="minimal"  /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="bold"     /&gt;</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # Other Blade components:</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::chart-widget   report="id" chart-type="bar" /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::report-widget  report="id" :show-export="true" /&gt;</span></div>
+<div><span class="t-info">  &lt;x-dashboard                         slug="ceo-dashboard" /&gt;</span></div>
+<div><span class="t-info">  &lt;livewire:report-widget              report="id" /&gt;</span></div>
 <div>&nbsp;</div>
 <div><span class="t-muted">  # REST API is now live at:</span></div>
 <div><span class="t-info">  POST  /api/reporting/run          ← ad-hoc execution</span></div>
@@ -723,6 +799,10 @@ $query = DB::table('orders')
     <span style="color:var(--cyan)">✓ Multi-tenant</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--amber)">✓ CSV / XLSX / JSON Export</span>
+    <span style="color:var(--muted)">·</span>
+    <span style="color:var(--purple)">✓ Blade Components + Livewire</span>
+    <span style="color:var(--muted)">·</span>
+    <span style="color:var(--green)">✓ 6 KPI Themes (flat · gradient · dark · glass · minimal · bold)</span>
   </div>
 </footer>
 

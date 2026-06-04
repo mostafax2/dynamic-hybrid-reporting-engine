@@ -42,8 +42,8 @@ header>*:not(.hero-bg):not(canvas){position:relative;z-index:2}
 .badge-hint{position:absolute;bottom:calc(100% + 14px);top:auto;right:50%;transform:translateX(50%) translateY(6px);width:360px;background:#1C2333;border:1px solid rgba(0,180,255,.25);border-radius:12px;padding:1rem 1.2rem;color:#CBD5E1;font-size:.82rem;line-height:1.7;text-align:right;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;box-shadow:0 8px 30px rgba(0,0,0,.18);z-index:20}
 .hint-arrow{position:absolute;bottom:-7px;right:50%;transform:translateX(50%) rotate(45deg);width:12px;height:12px;background:#1C2333;border-bottom:1px solid rgba(0,180,255,.25);border-right:1px solid rgba(0,180,255,.25)}
 .badge-hint strong{display:block;color:#00C8FF;margin-bottom:.3rem;font-size:.88rem}
-.badge-hint code{display:block;background:rgba(0,200,255,.08);border:1px solid rgba(0,200,255,.15);border-radius:6px;padding:.4rem .7rem;margin:.6rem 0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#FFFFFF;white-space:nowrap;overflow-x:auto;direction:ltr;text-align:left}
-.hint-open{display:block;color:#FFFFFF;font-size:.75rem;margin-top:.4rem;text-align:center;opacity:.7}
+.badge-hint code{display:block;background:#0d1a26;border:1px solid rgba(0,200,255,.2);border-radius:6px;padding:.4rem .7rem;margin:.6rem 0 .5rem;font-family:'JetBrains Mono',monospace;font-size:.75rem;color:#e2f0f8;white-space:nowrap;overflow-x:auto;direction:ltr;text-align:left}
+.hint-open{display:block;color:#8ab8cc;font-size:.75rem;margin-top:.4rem;text-align:center}
 .hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(0,120,168,.08);border:1px solid rgba(0,120,168,.25);border-radius:100px;padding:.4rem 1.2rem;font-size:.78rem;letter-spacing:.05em;color:var(--cyan);margin-bottom:2rem;font-family:'JetBrains Mono',monospace;direction:ltr}
 .hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 1.5s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
@@ -111,10 +111,6 @@ section{padding:6rem 0}
 .feat-icon{font-size:2rem;margin-bottom:1rem;display:block}
 .feat-card h3{color:var(--text);margin-bottom:.5rem}
 .feat-card p{font-size:.88rem;margin:0}
-
-#dsl-sec{background:var(--bg)}
-.dsl-box{background:#1C2333;border:1px solid rgba(0,200,255,.15);border-radius:14px;padding:1.5rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.8;color:#CBD5E1;overflow-x:auto;white-space:pre;direction:ltr;text-align:left}
-.jk{color:#8BE9FD}.jv{color:#F1FA8C}.jn{color:#FF79C6}.jb{color:var(--amber)}
 
 #code{background:#EBF2F9}
 .code-tabs{display:flex;gap:.5rem;margin-bottom:0;border-bottom:1px solid rgba(0,100,160,.15);background:#F8FAFC;border-radius:14px 14px 0 0;padding:.4rem .4rem 0;flex-direction:row-reverse}
@@ -198,7 +194,7 @@ footer strong{color:var(--cyan)}
       <strong>متاح على Packagist</strong>
       ثبّته في ثوانٍ عبر Composer
       <code>composer require mostafax/dynamic-hybrid-reporting-engine</code>
-      <span class="hint-open">افتح صفحة الباكج ↗</span>
+      <span class="hint-open">افتح صفحة الـ Package ↗</span>
     </div>
   </div>
 
@@ -214,12 +210,12 @@ footer strong{color:var(--cyan)}
   <div class="hero-flow">
     <div class="flow-node">
       <div class="flow-icon g">📤</div>
-      <div class="flow-label"><strong style="color:var(--green)">النتيجة</strong><br>JSON / CSV / XLSX</div>
+      <div class="flow-label"><strong style="color:var(--green)">Result</strong><br>JSON / CSV / XLSX</div>
     </div>
     <div class="flow-arrow"><span>▶</span></div>
     <div class="flow-node">
       <div class="flow-icon p">🗄️</div>
-      <div class="flow-label"><strong style="color:var(--purple)">MySQL / MongoDB</strong><br>المحوّل ينفّذ</div>
+      <div class="flow-label"><strong style="color:var(--purple)">MySQL / MongoDB</strong><br>Adapter ينفّذ</div>
     </div>
     <div class="flow-arrow"><span>▶</span></div>
     <div class="flow-node">
@@ -239,13 +235,13 @@ footer strong{color:var(--cyan)}
 <div class="container">
   <div class="section-label">المشكلة</div>
   <h2>التقارير دايماً الجزء الصعب</h2>
-  <p>كل مشروع بيحتاج تقارير في النهاية — لكن كتابة كويريز منفصلة لكل مصدر، لكل فورمات، لكل تينانت، مش قابل للتوسع.</p>
+  <p>كل مشروع بيحتاج تقارير في النهاية — لكن كتابة Queries منفصلة لكل مصدر، لكل Format، لكل Tenant، مش قابل للتوسع.</p>
 
   <div class="problem-grid reveal">
     <div>
       <div class="db-visual">
         <div class="db-header">
-          😩 &nbsp;الطريقة القديمة <span style="color:var(--muted);margin-left:auto;font-size:.7rem">تقرير واحد = كلاس كامل</span>
+          😩 &nbsp;الطريقة القديمة <span style="color:var(--muted);margin-left:auto;font-size:.7rem">تقرير واحد = Class كامل</span>
         </div>
         <div class="db-row slow"><span>⏳ MySQLRevenueReport.php</span><span>+80 سطر</span></div>
         <div class="db-row slow"><span>⏳ MongoAnalyticsReport.php</span><span>+110 سطر</span></div>
@@ -265,13 +261,13 @@ $query = DB::table('orders')
     </div>
     <div>
       <ul class="pain-list">
-        <li>كل تقرير جديد بيتطلب كلاس PHP من الصفر</li>
-        <li>لوجيك كويري منفصل وغير متوافق بين MySQL وMongoDB</li>
-        <li>كود التصدير (Excel, CSV, JSON) متكرر في كل كنترولر</li>
-        <li>لا validation مركزي — مخاطر Injection مش ملحوظة</li>
-        <li>فلترة Multi-tenant بيتحطها يدوياً في كل كويري</li>
-        <li>ودجيتات الداشبورد ملهاش عقد binding موحد</li>
-        <li>الكاشينج متنسوخ بشكل مش متسق في التقارير المختلفة</li>
+        <li>كل تقرير جديد بيتطلب Class PHP من الصفر</li>
+        <li>Query Logic منفصل وغير متوافق بين MySQL وMongoDB</li>
+        <li>كود التصدير (Excel, CSV, JSON) متكرر في كل Controller</li>
+        <li>لا Validation مركزي — مخاطر Injection مش ملحوظة</li>
+        <li>Multi-tenant Filtering بيتحط يدوياً في كل Query</li>
+        <li>Widgets الـ Dashboard ملهاش عقد Binding موحد</li>
+        <li>الـ Caching متنسوخ بشكل مش متسق في التقارير المختلفة</li>
       </ul>
     </div>
   </div>
@@ -282,15 +278,15 @@ $query = DB::table('orders')
 <section id="how">
 <div class="container">
   <div class="section-label">الحل</div>
-  <h2>بايبلاين تنفيذ من 8 خطوات</h2>
-  <p>كل تقرير — بغض النظر عن المصدر — بيمر على نفس البايبلاين المحصّن قبل أي استدعاء للداتابيز.</p>
+  <h2>Execution Pipeline من 8 خطوات</h2>
+  <p>كل تقرير — بغض النظر عن المصدر — بيمر على نفس الـ Pipeline المحصّن قبل أي استدعاء للـ Database.</p>
 
   <div class="flow-steps">
     <div class="flow-step">
       <div class="step-content" style="text-align:right">
-        <div class="step-tag">الدخول</div>
+        <div class="step-tag">Entry</div>
         <h3>DSL Input</h3>
-        <p style="font-size:.88rem;margin:0">JSON object (أو PHP array) بيوصف التقرير: المصدر، الجدول، الحقول، الفلاتر، التجميعات، الترتيب، الصفحات.</p>
+        <p style="font-size:.88rem;margin:0">JSON object (أو PHP array) بيوصف التقرير: المصدر، الجدول، الحقول، الـ Filters، الـ Aggregations، الترتيب، الـ Pagination.</p>
       </div>
       <div class="step-num c">1</div>
       <div></div>
@@ -300,17 +296,17 @@ $query = DB::table('orders')
       <div></div>
       <div class="step-num c">2</div>
       <div class="step-content" style="text-align:right">
-        <div class="step-tag">النواة</div>
+        <div class="step-tag">Core</div>
         <h3>DslParser</h3>
-        <p style="font-size:.88rem;margin:0"><code style="color:var(--cyan)">DslParser</code> بيحوّل الـ input الخام لـ <code style="color:var(--cyan)">QueryDefinition</code> مكتوبة بالنوع (immutable) مع هاش MD5 ثابت.</p>
+        <p style="font-size:.88rem;margin:0"><code style="color:var(--cyan)">DslParser</code> بيحوّل الـ Input الخام لـ <code style="color:var(--cyan)">QueryDefinition</code> مكتوبة بالنوع (Immutable) مع Hash MD5 ثابت.</p>
       </div>
     </div>
 
     <div class="flow-step">
       <div class="step-content" style="text-align:right">
-        <div class="step-tag a">التحقق</div>
+        <div class="step-tag a">Validation</div>
         <h3>QueryValidator</h3>
-        <p style="font-size:.88rem;margin:0">بيطبّق الحدود: أقصى صفوف، أقصى joins، أقصى شروط، أقصى تجميعات. بيرفض أي Operator غير مسموح.</p>
+        <p style="font-size:.88rem;margin:0">بيطبّق الـ Limits: أقصى Rows، أقصى Joins، أقصى Conditions، أقصى Aggregations. بيرفض أي Operator غير مسموح.</p>
       </div>
       <div class="step-num a">3</div>
       <div></div>
@@ -320,17 +316,17 @@ $query = DB::table('orders')
       <div></div>
       <div class="step-num a">4</div>
       <div class="step-content" style="text-align:right">
-        <div class="step-tag a">الأمان</div>
+        <div class="step-tag a">Security</div>
         <h3>QuerySanitizer + ACL</h3>
-        <p style="font-size:.88rem;margin:0"><code style="color:var(--amber)">QuerySanitizer</code> بيتحقق من كل identifier بـ Regex. <code style="color:var(--amber)">FieldAccessControl</code> بيشيل الحقول المحظورة.</p>
+        <p style="font-size:.88rem;margin:0"><code style="color:var(--amber)">QuerySanitizer</code> بيتحقق من كل Identifier بـ Regex. <code style="color:var(--amber)">FieldAccessControl</code> بيشيل الـ Fields المحظورة.</p>
       </div>
     </div>
 
     <div class="flow-step">
       <div class="step-content" style="text-align:right">
-        <div class="step-tag p" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2);color:var(--purple)">الكاش</div>
+        <div class="step-tag p" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2);color:var(--purple)">Cache</div>
         <h3>Redis Cache Probe</h3>
-        <p style="font-size:.88rem;margin:0"><code style="color:var(--purple)">QueryCacheManager</code> بيشوف Redis بالهاش. مفاتيح الكاش مقسّمة بالتينانت — بيانات تينانت ميتسرّبش لتاني.</p>
+        <p style="font-size:.88rem;margin:0"><code style="color:var(--purple)">QueryCacheManager</code> بيشوف Redis بالـ Hash. مفاتيح الـ Cache مقسّمة بالـ Tenant — بيانات Tenant ميتسرّبش لتاني.</p>
       </div>
       <div class="step-num p">5</div>
       <div></div>
@@ -340,17 +336,17 @@ $query = DB::table('orders')
       <div></div>
       <div class="step-num p">6</div>
       <div class="step-content" style="text-align:right">
-        <div class="step-tag p" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2);color:var(--purple)">التوجيه</div>
+        <div class="step-tag p" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.2);color:var(--purple)">Routing</div>
         <h3>DataSourceResolver</h3>
-        <p style="font-size:.88rem;margin:0">بيجيب المحوّل الصح من الـ Registry: <code style="color:var(--purple)">MySQLDataSource</code> أو <code style="color:var(--purple)">MongoDataSource</code>. ممكن تضيف محوّلات Custom وقت التشغيل.</p>
+        <p style="font-size:.88rem;margin:0">بيجيب الـ Adapter الصح من الـ Registry: <code style="color:var(--purple)">MySQLDataSource</code> أو <code style="color:var(--purple)">MongoDataSource</code>. ممكن تضيف Custom Adapters وقت الـ Runtime.</p>
       </div>
     </div>
 
     <div class="flow-step">
       <div class="step-content" style="text-align:right">
-        <div class="step-tag g">التنفيذ</div>
-        <h3>المحوّل ينفّذ</h3>
-        <p style="font-size:.88rem;margin:0">MySQL بيستخدم Laravel Query Builder. MongoDB ببني بايبلاين <code style="color:var(--green)">$facet</code> — بيانات + totalCount في رحلة واحدة للداتابيز.</p>
+        <div class="step-tag g">Execution</div>
+        <h3>Adapter ينفّذ</h3>
+        <p style="font-size:.88rem;margin:0">MySQL بيستخدم Laravel Query Builder. MongoDB بيبني Pipeline <code style="color:var(--green)">$facet</code> — Data + totalCount في رحلة واحدة للـ Database.</p>
       </div>
       <div class="step-num g">7</div>
       <div></div>
@@ -360,9 +356,9 @@ $query = DB::table('orders')
       <div></div>
       <div class="step-num g">8</div>
       <div class="step-content" style="text-align:right">
-        <div class="step-tag g">النتيجة</div>
+        <div class="step-tag g">Result</div>
         <h3>ExecutionResult + Event</h3>
-        <p style="font-size:.88rem;margin:0">بيرجع <code style="color:var(--green)">ExecutionResult</code> بالداتا والعدد الكلي. بيحفظ في Redis وبيطلق Event <code style="color:var(--green)">ReportExecuted</code>.</p>
+        <p style="font-size:.88rem;margin:0">بيرجع <code style="color:var(--green)">ExecutionResult</code> بالـ Data والعدد الكلي. بيحفظ في Redis وبيطلق Event <code style="color:var(--green)">ReportExecuted</code>.</p>
       </div>
     </div>
   </div>
@@ -375,15 +371,19 @@ $query = DB::table('orders')
   <div class="section-label">الميزات</div>
   <h2>كل حاجة جاهزة — مفيش حاجة تربطها</h2>
   <div class="features-grid">
-    <div class="feat-card reveal"><span class="feat-icon">🔀</span><h3>DSL موحّد بـ JSON</h3><p>سكيما واحدة لـ MySQL وMongoDB — حقول، فلاتر (AND/OR متداخل)، تجميعات، joins، group-by، ترتيب، صفحات.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🔌</span><h3>محوّلات قابلة للتوسع</h3><p>سجّل مصادر بيانات Custom وقت التشغيل. ضيف PostgreSQL، Elasticsearch، أو أي HTTP API.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Redis Query Cache</h3><p>النتائج محفوظة بالهاش. مفاتيح الكاش مقسّمة بالتينانت ومبتلاش على المستوى الصح عند التحديث.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🔐</span><h3>حماية من Injection</h3><p>Regex Whitelist على كل اسم عمود أو جدول. القيم دايماً PDO Binding — محتش في SQL أو Mongo أبداً.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🛡️</span><h3>صلاحيات على مستوى الحقول</h3><p>قائمة الحقول المحظورة عالمياً + محظورة حسب الدور مع Wildcard Patterns. الحقول المحظورة تتشال تلقائياً.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">📤</span><h3>3 فورمات تصدير</h3><p>CSV (UTF-8 BOM Streaming)، XLSX (PhpSpreadsheet)، وJSON — كلهم Streamed للعميل مباشرة بدون ملفات مؤقتة.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">🏢</span><h3>جاهز للـ Multi-tenant</h3><p>Tenant ID بيتحط في كل كويري تلقائياً. MySQL بياخد WHERE clause، وMongoDB بياخد $match stage — صفر كود إضافي.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">📊</span><h3>داشبورد وودجيتات</h3><p>Entities لـ Dashboards وWidgets (جدول، bar chart، line chart، KPI card، heatmap). كل ودجيت مربوط بتقرير محفوظ.</p></div>
-    <div class="feat-card reveal"><span class="feat-icon">📋</span><h3>سجل تنفيذ كامل</h3><p><code style="color:var(--cyan)">dhr_report_executions</code> بتسجّل كل تشغيل: ميلي ثانية، صفوف، ذاكرة، cache hit، الحالة.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔀</span><h3>Unified JSON DSL</h3><p>Schema واحدة لـ MySQL وMongoDB — Fields، Filters (AND/OR متداخل)، Aggregations، Joins، Group-By، ترتيب، Pagination.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔌</span><h3>Adapters قابلة للتوسع</h3><p>سجّل Custom Data Sources وقت الـ Runtime. ضيف PostgreSQL، Elasticsearch، أو أي HTTP API.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Redis Query Cache</h3><p>النتائج محفوظة بالـ Hash. مفاتيح الـ Cache مقسّمة بالـ Tenant وبتتبطل تلقائياً عند التحديث.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🔐</span><h3>حماية من Injection</h3><p>Regex Whitelist على كل اسم Column أو Table. القيم دايماً PDO Binding — محتش في SQL أو MongoDB أبداً.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🛡️</span><h3>Field-Level ACL</h3><p>Global Deny List + Role-Based Deny List مع Wildcard Patterns. الـ Fields المحظورة بتتشال تلقائياً.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📤</span><h3>3 Export Formats</h3><p>CSV (UTF-8 BOM Streaming)، XLSX (PhpSpreadsheet)، وJSON — كلهم Streamed للـ Client مباشرة بدون Temp Files.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🏢</span><h3>Multi-tenant Ready</h3><p>Tenant ID بيتحط في كل Query تلقائياً. MySQL بياخد WHERE Clause، وMongoDB بياخد $match Stage — صفر كود إضافي.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🧩</span><h3>Blade Components أصلية</h3><p>ضمّن KPIs وCharts وTables وFilters في أي Blade Template بـ Tag واحد. Bootstrap وTailwind. RTL جاهز.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">⚡</span><h3>Livewire Integration</h3><p>اختياري — <code style="color:var(--cyan)">livewire:report-widget</code> بيضيف Real-time Filtering وSorting وPagination بدون أي JavaScript.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📊</span><h3>Dashboard و Widgets</h3><p>Domain Entities لـ Dashboards وWidgets (Table، Bar Chart، Line Chart، KPI Card، Heatmap). كل Widget مربوط بـ Report محفوظ.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">📋</span><h3>Execution Audit Log</h3><p><code style="color:var(--cyan)">dhr_report_executions</code> بتسجّل كل Run: Execution Time، Rows، Memory، Cache Hit، Status.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🎨</span><h3>6 ثيمات للـ KPI Widget</h3><p><code style="color:var(--cyan)">variant="flat|gradient|dark|glass|minimal|bold"</code> — ثيمات CSS قابلة للتبديل اللحظي مع Color Picker وTransitions سلسة.</p></div>
+    <div class="feat-card reveal"><span class="feat-icon">🍃</span><h3>MongoDB $facet Pipeline</h3><p>بيبني <code style="color:var(--cyan)">$match → $group → $project → $sort → $facet</code> تلقائياً — Data + totalCount في رحلة واحدة. BSONArray وObjectId بتتحوّل تلقائياً.</p></div>
   </div>
 </div>
 </section>
@@ -392,18 +392,60 @@ $query = DB::table('orders')
 <section id="code">
 <div class="container">
   <div class="section-label">تجربة المطوّر</div>
-  <h2>من الصفر لتقرير في دقايق</h2>
-  <p>الـ Facade، وAPI HTTP، وتصدير الملفات — كلهم شغّالين من أول لحظة.</p>
+  <h2>من الصفر لـ Report في دقايق</h2>
+  <p>الـ Facade، وHTTP API، وExport Endpoint — كلهم شغّالين من أول لحظة.</p>
   <div class="reveal" style="margin-top:2rem">
     <div class="code-tabs">
       <button class="tab-btn active" onclick="showTab('facade')">Facade</button>
+      <button class="tab-btn" onclick="showTab('blade')">Blade Components</button>
       <button class="tab-btn" onclick="showTab('api')">REST API</button>
-      <button class="tab-btn" onclick="showTab('adapter')">محوّل مخصص</button>
-      <button class="tab-btn" onclick="showTab('export')">تصدير</button>
+      <button class="tab-btn" onclick="showTab('adapter')">Custom Adapter</button>
+      <button class="tab-btn" onclick="showTab('export')">Export</button>
     </div>
 
+    <div id="tab-blade" class="code-panel"><div class="code-block">
+<span class="cm">&lt;!-- KPI Cards — variant: flat | gradient | dark | glass | minimal | bold --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::kpi-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">:cols</span>=<span class="str">"3"</span>
+    <span class="str">color</span>=<span class="str">"#0077A8"</span>
+    <span class="str">variant</span>=<span class="str">"glass"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Chart.js مع SSR Table Fallback (بدون JS) --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"revenue-by-status"</span>
+    <span class="str">chart-type</span>=<span class="str">"bar"</span>
+    <span class="str">label-column</span>=<span class="str">"status"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+/&gt;
+
+<span class="cm">&lt;!-- MongoDB Pie Chart --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::chart-widget</span>
+    <span class="str">report</span>=<span class="str">"demo-mongo-revenue-by-channel"</span>
+    <span class="str">chart-type</span>=<span class="str">"pie"</span>
+    <span class="str">label-column</span>=<span class="str">"channel"</span>
+    <span class="str">value-column</span>=<span class="str">"total_revenue"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Table + Filter + Export --&gt;</span>
+&lt;<span class="fn">x-reporting-engine::report-filter</span> <span class="str">report</span>=<span class="str">"orders"</span> <span class="str">:inline</span>=<span class="str">"true"</span> /&gt;
+&lt;<span class="fn">x-reporting-engine::report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+    <span class="str">:per-page</span>=<span class="str">"15"</span>
+/&gt;
+
+<span class="cm">&lt;!-- Livewire: Real-time Filter + Sort + Paginate --&gt;</span>
+&lt;<span class="fn">livewire:report-widget</span>
+    <span class="str">report</span>=<span class="str">"orders"</span>
+    <span class="str">:per-page</span>=<span class="str">"20"</span>
+    <span class="str">:show-filters</span>=<span class="str">"true"</span>
+    <span class="str">:show-export</span>=<span class="str">"true"</span>
+/&gt;</div></div>
+
     <div id="tab-facade" class="code-panel active"><div class="code-block">
-<span class="cm">// نفّذ تقرير عبر الـ Facade — من أي مكان في التطبيق</span>
+<span class="cm">// نفّذ Report عبر الـ Facade — من أي مكان في التطبيق</span>
 <span class="kw">use</span> <span class="cls">Mostafax\ReportingEngine\Support\Facades\ReportingEngine</span>;
 
 <span class="op">$result</span> = ReportingEngine::<span class="fn">run</span>([
@@ -428,14 +470,14 @@ $query = DB::table('orders')
     <span class="str">'pagination'</span>   => [<span class="str">'page'</span> => <span class="num">1</span>, <span class="str">'per_page'</span> => <span class="num">25</span>],
 ]);
 
-<span class="cm">// $result هو ExecutionResult value object</span>
-<span class="op">$result</span>->data;                       <span class="cm">// array بالصفوف</span>
-<span class="op">$result</span>->total;                      <span class="cm">// العدد الكلي (بدون LIMIT)</span>
+<span class="cm">// $result هو ExecutionResult Value Object</span>
+<span class="op">$result</span>->data;                       <span class="cm">// Array بالـ Rows</span>
+<span class="op">$result</span>->total;                      <span class="cm">// Total Count (بدون LIMIT)</span>
 <span class="op">$result</span>->metadata->executionTimeMs;  <span class="cm">// مثلاً 12.4</span>
 <span class="op">$result</span>->metadata->cacheHit;         <span class="cm">// true لو جاي من Redis</span></div></div>
 
     <div id="tab-api" class="code-panel"><div class="code-block">
-<span class="cm">// POST /api/reporting/run — تنفيذ ad-hoc بدون حفظ</span>
+<span class="cm">// POST /api/reporting/run — Ad-hoc Execution بدون حفظ</span>
 <span class="fn">POST</span> /api/reporting/run
 <span class="str">Content-Type</span>: application/json
 {
@@ -448,21 +490,21 @@ $query = DB::table('orders')
   }
 }
 
-<span class="cm">// POST /api/reporting — احفظ تقرير</span>
+<span class="cm">// POST /api/reporting — احفظ Report</span>
 <span class="fn">POST</span> /api/reporting
 { <span class="str">"name"</span>: <span class="str">"إيرادات حسب الحالة"</span>, <span class="str">"definition"</span>: { ... } }
 
-<span class="cm">// POST /api/reporting/{id}/run — نفّذ تقرير محفوظ</span>
+<span class="cm">// POST /api/reporting/{id}/run — نفّذ Saved Report</span>
 <span class="fn">POST</span> /api/reporting/<span class="num">{id}</span>/run
 { <span class="str">"page"</span>: <span class="num">2</span>, <span class="str">"per_page"</span>: <span class="num">50</span> }
 
-<span class="cm">// GET /api/reporting/{id}/export — Stream تحميل ملف</span>
+<span class="cm">// GET /api/reporting/{id}/export — Stream File Download</span>
 <span class="fn">GET</span>  /api/reporting/<span class="num">{id}</span>/export?format=xlsx
 <span class="fn">GET</span>  /api/reporting/<span class="num">{id}</span>/export?format=csv
 <span class="fn">GET</span>  /api/reporting/<span class="num">{id}</span>/export?format=json</div></div>
 
     <div id="tab-adapter" class="code-panel"><div class="code-block">
-<span class="cm">// اعمل محوّل مخصص — مثلاً PostgreSQL</span>
+<span class="cm">// اعمل Custom Adapter — مثلاً PostgreSQL</span>
 <span class="kw">class</span> <span class="cls">PostgreSQLDataSource</span> <span class="kw">implements</span> <span class="cls">DataSourceInterface</span>
 {
     <span class="kw">public function</span> <span class="fn">supports</span>(<span class="kw">string</span> <span class="op">$sourceType</span>): <span class="kw">bool</span>
@@ -483,10 +525,10 @@ $query = DB::table('orders')
     -><span class="fn">register</span>(<span class="str">'pgsql'</span>, <span class="kw">new</span> <span class="cls">PostgreSQLDataSource</span>());</div></div>
 
     <div id="tab-export" class="code-panel"><div class="code-block">
-<span class="cm">// Stream تصدير مباشر من الكنترولر</span>
+<span class="cm">// Stream Export مباشر من الـ Controller</span>
 <span class="kw">public function</span> <span class="fn">download</span>(<span class="cls">Request</span> <span class="op">$req</span>, <span class="kw">string</span> <span class="op">$id</span>): <span class="cls">StreamedResponse</span>
 {
-    <span class="cm">// Streams مباشرة — بدون ملف مؤقت، بدون استهلاك ذاكرة</span>
+    <span class="cm">// Streams مباشرة — بدون Temp File، بدون Memory Spike</span>
     <span class="kw">return</span> <span class="op">$this</span>->export-><span class="fn">exportById</span>(
         reportId:  <span class="op">$id</span>,
         format:    <span class="op">$req</span>-><span class="fn">query</span>(<span class="str">'format'</span>, <span class="str">'csv'</span>), <span class="cm">// csv | xlsx | json</span>
@@ -494,7 +536,7 @@ $query = DB::table('orders')
     );
 }
 
-<span class="cm">// ExporterFactory قابل للتوسع — سجّل فورمات مخصصة:</span>
+<span class="cm">// ExporterFactory قابل للتوسع — سجّل Custom Formats:</span>
 <span class="op">$factory</span>-><span class="fn">register</span>(<span class="str">'parquet'</span>, <span class="kw">new</span> <span class="cls">ParquetExporter</span>());</div></div>
   </div>
 </div>
@@ -504,32 +546,32 @@ $query = DB::table('orders')
 <section id="perf">
 <div class="container">
   <div class="section-label">الأداء</div>
-  <h2>الكاش بيغيّر كل حاجة</h2>
-  <p>نفس كويري التجميع — فرق كبير في زمن الاستجابة بين Redis ساخن وبارد.</p>
+  <h2>الـ Cache بيغيّر كل حاجة</h2>
+  <p>نفس الـ Aggregation Query — فرق كبير في زمن الاستجابة بين Redis ساخن وبارد.</p>
   <div class="perf-compare reveal">
     <div class="perf-col bad">
       <div class="perf-header">
         <span class="perf-badge bad">بطيء</span>
-        <div style="text-align:right"><div style="font-weight:700">بدون كاش (بارد)</div><div style="font-size:.75rem;color:var(--muted)">كل طلب بيضرب الداتابيز</div></div>
+        <div style="text-align:right"><div style="font-weight:700">بدون Cache (Cold)</div><div style="font-size:.75rem;color:var(--muted)">كل Request بيضرب الـ Database</div></div>
         <span style="font-size:1.5rem">🐌</span>
       </div>
       <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">820ms</span><span>إيرادات حسب الحالة</span></div><div class="bar-track"><div class="bar-fill bad" data-w="82"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">640ms</span><span>MongoDB $facet aggregation</span></div><div class="bar-track"><div class="bar-fill bad" data-w="64"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">1.4s</span><span>تقرير عملاء multi-join</span></div><div class="bar-track"><div class="bar-fill bad" data-w="94"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">3.2s</span><span>تجهيز تصدير 10k صف</span></div><div class="bar-track"><div class="bar-fill bad" data-w="78"></div></div></div>
-      <div style="margin-top:1rem;padding:.8rem;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:right">💥 كل تحديث للداشبورد بينفّذ Aggregation كاملة على الداتابيز</div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">640ms</span><span>MongoDB $facet Aggregation</span></div><div class="bar-track"><div class="bar-fill bad" data-w="64"></div></div></div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">1.4s</span><span>تقرير عملاء Multi-Join</span></div><div class="bar-track"><div class="bar-fill bad" data-w="94"></div></div></div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--red)">3.2s</span><span>تجهيز Export لـ 10k Row</span></div><div class="bar-track"><div class="bar-fill bad" data-w="78"></div></div></div>
+      <div style="margin-top:1rem;padding:.8rem;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:right">💥 كل تحديث للـ Dashboard بينفّذ Aggregation كاملة على الـ Database</div>
     </div>
     <div class="perf-col good">
       <div class="perf-header">
         <span class="perf-badge good">سريع</span>
-        <div style="text-align:right"><div style="font-weight:700">كاش ساخن (Redis)</div><div style="font-size:.75rem;color:var(--muted)">النتيجة جاية مباشرة من الكاش</div></div>
+        <div style="text-align:right"><div style="font-weight:700">Cache ساخن (Redis)</div><div style="font-size:.75rem;color:var(--muted)">النتيجة جاية مباشرة من الـ Cache</div></div>
         <span style="font-size:1.5rem">⚡</span>
       </div>
       <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">3ms</span><span>إيرادات حسب الحالة</span></div><div class="bar-track"><div class="bar-fill good" data-w="2"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">2ms</span><span>MongoDB $facet aggregation</span></div><div class="bar-track"><div class="bar-fill good" data-w="1"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">4ms</span><span>تقرير عملاء multi-join</span></div><div class="bar-track"><div class="bar-fill good" data-w="3"></div></div></div>
-      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">4ms</span><span>تجهيز تصدير 10k صف</span></div><div class="bar-track"><div class="bar-fill good" data-w="3"></div></div></div>
-      <div style="margin-top:1rem;padding:.8rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:right">✅ مفتاح Redis مقسّم بالتينانت — بيتحذف تلقائياً عند تحديث التقرير</div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">2ms</span><span>MongoDB $facet Aggregation</span></div><div class="bar-track"><div class="bar-fill good" data-w="1"></div></div></div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">4ms</span><span>تقرير عملاء Multi-Join</span></div><div class="bar-track"><div class="bar-fill good" data-w="3"></div></div></div>
+      <div class="bar-row"><div class="bar-label"><span style="color:var(--green)">4ms</span><span>تجهيز Export لـ 10k Row</span></div><div class="bar-track"><div class="bar-fill good" data-w="3"></div></div></div>
+      <div style="margin-top:1rem;padding:.8rem;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:8px;font-size:.85rem;color:var(--muted);text-align:right">✅ مفتاح Redis مقسّم بالـ Tenant — بيتحذف تلقائياً عند تحديث الـ Report</div>
     </div>
   </div>
 </div>
@@ -538,19 +580,19 @@ $query = DB::table('orders')
 <!-- SECURITY -->
 <section id="security">
 <div class="container">
-  <div class="section-label">نموذج الأمان</div>
-  <h2>دفاع متعدد الطبقات — في كل مستوى</h2>
-  <p>ستة ضوابط أمان مستقلة بتشتغل قبل أول استدعاء للداتابيز.</p>
+  <div class="section-label">Security Model</div>
+  <h2>Defense in Depth — في كل مستوى</h2>
+  <p>ستة Security Controls مستقلة بتشتغل قبل أول استدعاء للـ Database.</p>
   <div class="reveal">
     <table class="sec-table">
-      <thead><tr><th>الطبقة</th><th>الكلاس</th><th>بيحمي من إيه</th></tr></thead>
+      <thead><tr><th>الطبقة</th><th>الـ Class</th><th>بيحمي من إيه</th></tr></thead>
       <tbody>
-        <tr><td>Identifier Injection</td><td>QuerySanitizer</td><td>Regex Whitelist على كل اسم عمود وجدول — أي كويري حقنة بتترفض قبل القيلدر</td></tr>
+        <tr><td>Identifier Injection</td><td>QuerySanitizer</td><td>Regex Whitelist على كل اسم Column وTable — أي Injection Query بتترفض قبل الـ Builder</td></tr>
         <tr><td>Value Injection</td><td>Laravel Query Builder</td><td>كل القيم PDO Bindings — مش بتتحط في النص أبداً</td></tr>
-        <tr><td>كشف الحقول</td><td>FieldAccessControl</td><td>الحقول المحظورة عالمياً (password, api_key) بتتشال; الحقول المحظورة في الفلاتر بترمي 422</td></tr>
-        <tr><td>حدود الكويري</td><td>QueryValidator</td><td>أقصى صفوف، joins، شروط، تجميعات — بيمنع استنزاف الموارد</td></tr>
-        <tr><td>Rate Limiting</td><td>QueryLimitMiddleware</td><td>Budget لكل يوزر عبر Laravel RateLimiter — متبقي في الـ response headers</td></tr>
-        <tr><td>عزل التينانت</td><td>ReportEngine + Builders</td><td>Tenant ID بيتضاف تلقائياً — تينانت مش ممكن يقرأ بيانات التاني</td></tr>
+        <tr><td>Field Exposure</td><td>FieldAccessControl</td><td>الـ Fields المحظورة عالمياً (password, api_key) بتتشال؛ الـ Fields المحظورة في الـ Filters بترمي 422</td></tr>
+        <tr><td>Query Limits</td><td>QueryValidator</td><td>أقصى Rows، Joins، Conditions، Aggregations — بيمنع Resource Exhaustion</td></tr>
+        <tr><td>Rate Limiting</td><td>QueryLimitMiddleware</td><td>Budget لكل User عبر Laravel RateLimiter — المتبقي في الـ Response Headers</td></tr>
+        <tr><td>Tenant Isolation</td><td>ReportEngine + Builders</td><td>Tenant ID بيتضاف تلقائياً — Tenant مش ممكن يقرأ بيانات التاني</td></tr>
       </tbody>
     </table>
   </div>
@@ -561,12 +603,12 @@ $query = DB::table('orders')
 <section id="metrics">
 <div class="container">
   <div class="section-label">بالأرقام</div>
-  <h2>اللي الباكج بيقدمه</h2>
+  <h2>اللي الـ Package بيقدمه</h2>
   <div class="metrics-grid reveal">
-    <div class="metric-card"><span class="metric-num" data-target="8">0</span><span class="metric-unit">خطوة في البايبلاين</span><div class="metric-desc">كل تقرير بيمر على 8 مراحل محصّنة قبل استدعاء الداتابيز</div></div>
-    <div class="metric-card"><span class="metric-num" data-target="3">0</span><span class="metric-unit">فورمات تصدير</span><div class="metric-desc">CSV وXLSX وJSON — كلهم Streamed بدون ملفات مؤقتة</div></div>
-    <div class="metric-card"><span class="metric-num" data-target="100">0</span><span class="metric-unit">% خالية من Injection</span><div class="metric-desc">Identifiers محمية بـ Regex؛ القيم دايماً PDO Binding</div></div>
-    <div class="metric-card"><span class="metric-num" data-target="0">99</span><span class="metric-unit">ms (مع كاش)</span><div class="metric-desc">Redis ساخن بيرد على أي تقرير في أقل من 5ms بغض النظر عن التعقيد</div></div>
+    <div class="metric-card"><span class="metric-num" data-target="8">0</span><span class="metric-unit">خطوة في الـ Pipeline</span><div class="metric-desc">كل Report بيمر على 8 مراحل محصّنة قبل استدعاء الـ Database</div></div>
+    <div class="metric-card"><span class="metric-num" data-target="3">0</span><span class="metric-unit">Export Formats</span><div class="metric-desc">CSV وXLSX وJSON — كلهم Streamed بدون Temp Files</div></div>
+    <div class="metric-card"><span class="metric-num" data-target="100">0</span><span class="metric-unit">% Injection-free</span><div class="metric-desc">Identifiers محمية بـ Regex؛ القيم دايماً PDO Binding</div></div>
+    <div class="metric-card"><span class="metric-num" data-target="0">99</span><span class="metric-unit">ms (مع Cache)</span><div class="metric-desc">Redis ساخن بيرد على أي Report في أقل من 5ms بغض النظر عن التعقيد</div></div>
   </div>
 </div>
 </section>
@@ -574,14 +616,18 @@ $query = DB::table('orders')
 <!-- CLI -->
 <section id="cli">
 <div class="container">
-  <div class="section-label">التثبيت</div>
+  <div class="section-label">Installation</div>
   <h2>شغّال في 3 أوامر</h2>
-  <p>ثبّت، انشر الكونفيج، شغّل الـ Migration — بعدها REST API جاهز والـ Facade شغّالة.</p>
+  <p>ثبّت، انشر الـ Config، شغّل الـ Migration — بعدها REST API جاهز والـ Facade شغّالة.</p>
   <div class="terminal reveal">
     <div class="terminal-header"><div class="dot r"></div><div class="dot y"></div><div class="dot g"></div><div class="terminal-title">bash — laravel artisan</div></div>
     <div class="terminal-body">
 <div><span class="t-prompt">$</span> <span class="t-cmd">composer require mostafax/dynamic-hybrid-reporting-engine</span></div>
-<div><span class="t-ok">  ✓ تم التثبيت بنجاح</span></div>
+<div><span class="t-ok">  ✓ Package installed successfully</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # مطلوب: Redis Client</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require predis/predis</span></div>
+<div><span class="t-ok">  ✓ predis/predis — Pure-PHP Redis Client</span></div>
 <div>&nbsp;</div>
 <div><span class="t-prompt">$</span> <span class="t-cmd">php artisan vendor:publish --tag=reporting-engine-config</span></div>
 <div><span class="t-ok">  ✓ Config published → config/reporting-engine.php</span></div>
@@ -590,20 +636,35 @@ $query = DB::table('orders')
 <div><span class="t-ok">  ✓ Migrations published → database/migrations/</span></div>
 <div>&nbsp;</div>
 <div><span class="t-prompt">$</span> <span class="t-cmd">php artisan migrate</span></div>
-<div><span class="t-ok">  ✓ dhr_reports             تم الإنشاء</span></div>
-<div><span class="t-ok">  ✓ dhr_report_executions   تم الإنشاء</span></div>
-<div><span class="t-ok">  ✓ dhr_dashboards          تم الإنشاء</span></div>
-<div><span class="t-ok">  ✓ dhr_widgets             تم الإنشاء</span></div>
+<div><span class="t-ok">  ✓ dhr_reports             created</span></div>
+<div><span class="t-ok">  ✓ dhr_report_executions   created</span></div>
+<div><span class="t-ok">  ✓ dhr_dashboards          created</span></div>
+<div><span class="t-ok">  ✓ dhr_widgets             created</span></div>
 <div>&nbsp;</div>
-<div><span class="t-muted">  # اختياري: دعم تصدير XLSX</span></div>
-<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet</span></div>
-<div><span class="t-ok">  ✓ تصدير Excel مفعّل</span></div>
+<div><span class="t-muted">  # اختياري: XLSX + Livewire</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">composer require phpoffice/phpspreadsheet livewire/livewire</span></div>
+<div><span class="t-ok">  ✓ Excel Export + Livewire enabled</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # Demo Seeder — MySQL (80 orders) + MongoDB (120 events) + 5 تقارير</span></div>
+<div><span class="t-prompt">$</span> <span class="t-cmd">php artisan db:seed --class=ReportingEngineDemoSeeder</span></div>
+<div><span class="t-ok">  ✓ demo_orders seeded (80 rows — MySQL)</span></div>
+<div><span class="t-ok">  ✓ demo_events seeded (120 docs — MongoDB)</span></div>
+<div><span class="t-ok">  ✓ dhr_reports: 5 تقارير Demo محفوظة</span></div>
+<div><span class="t-ok">  ✓ Visit: /reporting-demo</span></div>
+<div>&nbsp;</div>
+<div><span class="t-muted">  # KPI Widget — 6 ثيمات قابلة للتبديل:</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="flat"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="gradient" /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="dark"     /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="glass"    /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="minimal"  /&gt;</span></div>
+<div><span class="t-info">  &lt;x-reporting-engine::kpi-widget report="id" variant="bold"     /&gt;</span></div>
 <div>&nbsp;</div>
 <div><span class="t-muted">  # REST API جاهز الآن على:</span></div>
-<div><span class="t-info">  POST  /api/reporting/run          ← تنفيذ ad-hoc</span></div>
-<div><span class="t-info">  POST  /api/reporting              ← حفظ تقرير</span></div>
-<div><span class="t-info">  POST  /api/reporting/{id}/run     ← تنفيذ تقرير محفوظ</span></div>
-<div><span class="t-info">  GET   /api/reporting/{id}/export  ← تصدير ملف</span></div>
+<div><span class="t-info">  POST  /api/reporting/run          ← Ad-hoc Execution</span></div>
+<div><span class="t-info">  POST  /api/reporting              ← حفظ Report</span></div>
+<div><span class="t-info">  POST  /api/reporting/{id}/run     ← تنفيذ Saved Report</span></div>
+<div><span class="t-info">  GET   /api/reporting/{id}/export  ← Stream Export</span></div>
     </div>
   </div>
 </div>
@@ -614,17 +675,19 @@ $query = DB::table('orders')
   <p style="color:var(--text);font-size:1.1rem;font-weight:700;margin-bottom:.5rem"><strong>محرك التقارير الهجين الديناميكي</strong></p>
   <p>Laravel Package — PHP 8.2+ — Laravel 10 / 11 / 12 / 13</p>
   <div style="margin-top:1.5rem;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;font-size:.85rem">
-    <span style="color:var(--cyan)">✓ DSL موحّد</span>
+    <span style="color:var(--cyan)">✓ Unified DSL</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--amber)">✓ MySQL + MongoDB</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--purple)">✓ Redis Cache</span>
     <span style="color:var(--muted)">·</span>
-    <span style="color:var(--green)">✓ صلاحيات على مستوى الحقل</span>
+    <span style="color:var(--green)">✓ Field-Level ACL</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--cyan)">✓ Multi-tenant</span>
     <span style="color:var(--muted)">·</span>
     <span style="color:var(--amber)">✓ CSV / XLSX / JSON</span>
+    <span style="color:var(--muted)">·</span>
+    <span style="color:var(--green)">✓ 6 ثيمات KPI (flat · gradient · dark · glass · minimal · bold)</span>
   </div>
 </footer>
 
@@ -637,7 +700,7 @@ $query = DB::table('orders')
   for(let i=0;i<60;i++) pts.push({x:Math.random()*2000,y:Math.random()*1000,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5,hue:Math.random()<.5?195:260,alpha:Math.random()*.4+.1});
   function draw(){
     ctx.clearRect(0,0,W,H);
-    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},80%,45%,${p.alpha})`;ctx.fill()});
+    pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W){p.vx*=-1}if(p.y<0||p.y>H){p.vy*=-1}ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`hsla(${p.hue},80%,45%,${p.alpha})`;ctx.fill()});
     for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(0,120,180,${(1-d/120)*.08})`;ctx.lineWidth=.5;ctx.stroke()}}
     requestAnimationFrame(draw);
   }
@@ -645,9 +708,9 @@ $query = DB::table('orders')
 })();
 const revealObs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible')}),{threshold:.1});
 document.querySelectorAll('.reveal,.flow-step').forEach(el=>revealObs.observe(el));
-const counterObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting)return;const el=x.target,target=+el.dataset.target,start=+el.textContent,t0=performance.now();function step(now){const p=Math.min((now-t0)/1800,1),ease=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*ease);if(p<1)requestAnimationFrame(step)}requestAnimationFrame(step);counterObs.unobserve(el)}),{threshold:.5});
+const counterObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting){return}const el=x.target,target=+el.dataset.target,start=+el.textContent,t0=performance.now();function step(now){const p=Math.min((now-t0)/1800,1),ease=1-Math.pow(1-p,3);el.textContent=Math.round(start+(target-start)*ease);if(p<1){requestAnimationFrame(step)}}requestAnimationFrame(step);counterObs.unobserve(el)}),{threshold:.5});
 document.querySelectorAll('.metric-num[data-target]').forEach(el=>counterObs.observe(el));
-const barObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting)return;x.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',200));barObs.unobserve(x.target)}),{threshold:.3});
+const barObs=new IntersectionObserver(e=>e.forEach(x=>{if(!x.isIntersecting){return}x.target.querySelectorAll('.bar-fill[data-w]').forEach(b=>setTimeout(()=>b.style.width=b.dataset.w+'%',200));barObs.unobserve(x.target)}),{threshold:.3});
 document.querySelectorAll('.perf-compare').forEach(el=>barObs.observe(el));
 function showTab(id){document.querySelectorAll('.code-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');event.target.classList.add('active')}
 document.querySelectorAll('.feat-card').forEach(card=>card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');card.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%')}));

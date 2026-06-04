@@ -24,31 +24,23 @@ final class MySQLDataSource implements DataSourceInterface
 
     public function query(QueryDefinition $definition): ExecutionResult
     {
-        $startTime  = hrtime(true);
-        $memBefore  = memory_get_usage(true);
-
-        $query = $this->builder->build($definition);
-        $total = $this->count($definition);
-
-        $rows = $query
-            ->offset($definition->pagination->offset)
-            ->limit($definition->pagination->perPage)
-            ->get()
-            ->map(fn($row) => (array) $row)
-            ->toArray();
-
-        return $this->buildResult($rows, $total, $definition->source, $startTime, $memBefore);
+        return $this->fetch($definition);
     }
 
     public function aggregate(QueryDefinition $definition): ExecutionResult
+    {
+        return $this->fetch($definition);
+    }
+
+    private function fetch(QueryDefinition $definition): ExecutionResult
     {
         $startTime = hrtime(true);
         $memBefore = memory_get_usage(true);
 
         $query = $this->builder->build($definition);
-        $total = $query->count();
+        $total = $this->count($definition);
 
-        $rows  = $query
+        $rows = $query
             ->offset($definition->pagination->offset)
             ->limit($definition->pagination->perPage)
             ->get()
