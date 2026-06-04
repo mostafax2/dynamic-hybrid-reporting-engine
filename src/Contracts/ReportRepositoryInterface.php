@@ -11,6 +11,9 @@ interface ReportRepositoryInterface
 {
     public function findById(string $id): ?Report;
 
+    /** Resolve by UUID (id) first, then by exact name match — for Blade component convenience. */
+    public function findByIdOrName(string $idOrName): ?Report;
+
     /** @return LengthAwarePaginator<Report> */
     public function findAll(int $perPage = 15): LengthAwarePaginator;
 

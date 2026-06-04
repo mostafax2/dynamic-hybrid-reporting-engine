@@ -18,6 +18,14 @@ final class EloquentReportRepository implements ReportRepositoryInterface
         return $model ? $this->toDomain($model) : null;
     }
 
+    public function findByIdOrName(string $idOrName): ?Report
+    {
+        $model = ReportModel::where('id', $idOrName)
+            ->orWhere('name', $idOrName)
+            ->first();
+        return $model ? $this->toDomain($model) : null;
+    }
+
     public function findAll(int $perPage = 15): LengthAwarePaginator
     {
         return ReportModel::latest()

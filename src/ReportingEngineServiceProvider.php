@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Mostafax\ReportingEngine;
 
-use Illuminate\Contracts\Cache\Repository as CacheRepository;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mostafax\ReportingEngine\Application\Services\ExecutionService;
 use Mostafax\ReportingEngine\Application\Services\ExportService;
@@ -28,6 +28,14 @@ use Mostafax\ReportingEngine\Infrastructure\DataSources\MySQLDataSource;
 use Mostafax\ReportingEngine\Infrastructure\Persistence\Repositories\EloquentReportRepository;
 use Mostafax\ReportingEngine\Infrastructure\Security\FieldAccessControl;
 use Mostafax\ReportingEngine\Infrastructure\Security\QuerySanitizer;
+use Mostafax\ReportingEngine\Support\ChartDataFormatter;
+use Mostafax\ReportingEngine\Support\FilterFormBuilder;
+use Mostafax\ReportingEngine\View\Components\ChartWidget;
+use Mostafax\ReportingEngine\View\Components\Dashboard;
+use Mostafax\ReportingEngine\View\Components\KpiWidget;
+use Mostafax\ReportingEngine\View\Components\ReportExport;
+use Mostafax\ReportingEngine\View\Components\ReportFilter;
+use Mostafax\ReportingEngine\View\Components\ReportWidget;
 
 final class ReportingEngineServiceProvider extends ServiceProvider
 {
@@ -42,6 +50,7 @@ final class ReportingEngineServiceProvider extends ServiceProvider
         $this->registerInfrastructure();
         $this->registerApplication();
         $this->registerExporters();
+        $this->registerBladeSupport();
     }
 
     public function boot(): void
@@ -49,10 +58,14 @@ final class ReportingEngineServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishConfig();
             $this->publishMigrations();
+            $this->publishViews();
         }
 
-        $this->registerRoutes();
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'reporting-engine');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->registerRoutes();
+        $this->registerBladeComponents();
+        $this->registerLivewireComponents();
     }
 
     // ── Registration ─────────────────────────────────────────────
@@ -62,17 +75,14 @@ final class ReportingEngineServiceProvider extends ServiceProvider
         $this->app->singleton(DslParser::class);
         $this->app->singleton(QuerySanitizer::class);
 
-        $this->app->singleton(QueryValidator::class, function ($app) {
-            return new QueryValidator(
-                config: config('reporting-engine', []),
-            );
-        });
+        // $app unused here — config() resolves at call time from the container
+        $this->app->singleton(QueryValidator::class, fn() => new QueryValidator(
+            config: config('reporting-engine', []),
+        ));
 
-        $this->app->singleton(FieldAccessControl::class, function ($app) {
-            return new FieldAccessControl(
-                config: config('reporting-engine.field_acl', []),
-            );
-        });
+        $this->app->singleton(FieldAccessControl::class, fn() => new FieldAccessControl(
+            config: config('reporting-engine.field_acl', []),
+        ));
 
         $this->app->singleton(ReportEngine::class, function ($app) {
             return new ReportEngine(
@@ -89,11 +99,9 @@ final class ReportingEngineServiceProvider extends ServiceProvider
 
     private function registerInfrastructure(): void
     {
-        // Data source builders
         $this->app->singleton(MySQLQueryBuilder::class);
         $this->app->singleton(MongoAggregationBuilder::class);
 
-        // Data source adapters
         $this->app->singleton(MySQLDataSource::class, function ($app) {
             return new MySQLDataSource($app->make(MySQLQueryBuilder::class));
         });
@@ -102,7 +110,6 @@ final class ReportingEngineServiceProvider extends ServiceProvider
             return new MongoDataSource($app->make(MongoAggregationBuilder::class));
         });
 
-        // Resolver
         $this->app->singleton(DataSourceResolver::class, function ($app) {
             return new DataSourceResolver(
                 container: $app,
@@ -110,20 +117,16 @@ final class ReportingEngineServiceProvider extends ServiceProvider
             );
         });
 
-        // Cache manager
         $this->app->singleton(CacheManagerInterface::class, function ($app) {
             $cacheConfig = config('reporting-engine.cache', []);
             $driver      = $cacheConfig['driver'] ?? 'redis';
 
-            $store = $app->make('cache')->store($driver);
-
             return new QueryCacheManager(
-                cache:  $store,
+                cache:  $app->make('cache')->store($driver),
                 config: $cacheConfig,
             );
         });
 
-        // Repository
         $this->app->singleton(ReportRepositoryInterface::class, EloquentReportRepository::class);
     }
 
@@ -169,6 +172,12 @@ final class ReportingEngineServiceProvider extends ServiceProvider
         });
     }
 
+    private function registerBladeSupport(): void
+    {
+        $this->app->singleton(ChartDataFormatter::class);
+        $this->app->singleton(FilterFormBuilder::class);
+    }
+
     // ── Boot helpers ─────────────────────────────────────────────
 
     private function registerRoutes(): void
@@ -177,7 +186,9 @@ final class ReportingEngineServiceProvider extends ServiceProvider
             return;
         }
 
-        $this->app['router']->group([
+        /** @var \Illuminate\Routing\Router $router */
+        $router = $this->app->make('router');
+        $router->group([
             'prefix'     => config('reporting-engine.routes.prefix', 'api/reporting'),
             'middleware' => config('reporting-engine.routes.middleware', ['api']),
             'as'         => 'reporting.',
@@ -185,6 +196,32 @@ final class ReportingEngineServiceProvider extends ServiceProvider
             $this->loadRoutesFrom(__DIR__ . '/../routes/api.php');
         });
     }
+
+    private function registerBladeComponents(): void
+    {
+        Blade::componentNamespace('Mostafax\\ReportingEngine\\View\\Components', 'reporting-engine');
+
+        Blade::component('reporting-engine::report-widget',  ReportWidget::class);
+        Blade::component('reporting-engine::kpi-widget',     KpiWidget::class);
+        Blade::component('reporting-engine::chart-widget',   ChartWidget::class);
+        Blade::component('reporting-engine::dashboard',      Dashboard::class);
+        Blade::component('reporting-engine::report-filter',  ReportFilter::class);
+        Blade::component('reporting-engine::report-export',  ReportExport::class);
+    }
+
+    private function registerLivewireComponents(): void
+    {
+        if (!class_exists(\Livewire\Component::class)) {
+            return;
+        }
+
+        \Livewire\Livewire::component(
+            'report-widget',
+            \Mostafax\ReportingEngine\Http\Livewire\ReportWidget::class,
+        );
+    }
+
+    // ── Publish helpers ──────────────────────────────────────────
 
     private function publishConfig(): void
     {
@@ -198,5 +235,12 @@ final class ReportingEngineServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'reporting-engine-migrations');
+    }
+
+    private function publishViews(): void
+    {
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/reporting-engine'),
+        ], 'reporting-engine-views');
     }
 }

@@ -143,6 +143,24 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Blade / UI Integration
+    |--------------------------------------------------------------------------
+    | theme         : 'bootstrap' | 'tailwind' | 'none' | 'auto'
+    |                 'auto' detects Tailwind via tailwind.config.js presence.
+    | chart_library : 'chartjs' (default) — include Chart.js in your layout;
+    |                 the widget canvas activates when it is detected.
+    | rtl_locales   : locales that require RTL text direction.
+    | dark_mode     : 'auto' | 'light' | 'dark'
+    */
+    'blade' => [
+        'theme'         => env('REPORTING_BLADE_THEME', 'auto'),
+        'chart_library' => env('REPORTING_CHART_LIBRARY', 'chartjs'),
+        'rtl_locales'   => ['ar', 'fa', 'he', 'ur'],
+        'dark_mode'     => env('REPORTING_DARK_MODE', 'auto'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | API Rate Limiting
     |--------------------------------------------------------------------------
     */
