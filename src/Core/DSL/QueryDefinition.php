@@ -13,9 +13,12 @@ final readonly class QueryDefinition
     /**
      * @param  SelectField[]      $fields
      * @param  AggregationField[] $aggregations
-     * @param  string[]           $groupBy
+     * @param  GroupByField[]     $groupBy
      * @param  OrderByField[]     $orderBy
      * @param  JoinClause[]       $joins
+     * @param  ComputedField[]    $computed
+     * @param  ColumnMetadata[]   $columnMeta
+     * @param  WindowFunction[]   $windows
      * @param  array<string,mixed>$options
      */
     public function __construct(
@@ -32,6 +35,12 @@ final readonly class QueryDefinition
         public array        $options       = [],
         public ?string      $reportId      = null,
         public ?string      $tenantId      = null,
+        public array        $computed      = [],
+        public array        $columnMeta    = [],
+        public ?FilterGroup $rlsFilters    = null,
+        // ── New in v2 ───────────────────────────────────────────────────────
+        public ?FilterGroup $having        = null,
+        public array        $windows       = [],
     ) {}
 
     public function isAggregation(): bool
@@ -44,9 +53,7 @@ final readonly class QueryDefinition
         return $this->tenantId !== null;
     }
 
-    /**
-     * Stable hash of this definition (used as cache key).
-     */
+    /** Stable hash of this definition (used as cache key). */
     public function hash(): string
     {
         return md5(serialize([
@@ -62,6 +69,10 @@ final readonly class QueryDefinition
             $this->joins,
             $this->options,
             $this->tenantId,
+            $this->computed,
+            $this->rlsFilters,
+            $this->having,
+            $this->windows,
         ]));
     }
 }

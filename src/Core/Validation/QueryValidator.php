@@ -106,10 +106,21 @@ final class QueryValidator
 
     private function validateGroupBy(QueryDefinition $definition): void
     {
+        if (empty($definition->groupBy)) {
+            return;
+        }
+
         $max = (int) ($this->config['limits']['max_group_by_fields'] ?? 5);
 
         if (count($definition->groupBy) > $max) {
             $this->errors['group_by'][] = "Maximum {$max} GROUP BY fields allowed.";
+        }
+
+        // Detect duplicates by output name (works with GroupByField objects)
+        $names      = array_map(fn($f) => $f->outputName(), $definition->groupBy);
+        $duplicates = array_keys(array_filter(array_count_values($names), fn(int $n) => $n > 1));
+        foreach ($duplicates as $dup) {
+            $this->errors['group_by'][] = "Duplicate GROUP BY field output name: '{$dup}'.";
         }
     }
 

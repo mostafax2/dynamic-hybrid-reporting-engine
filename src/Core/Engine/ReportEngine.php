@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Mostafax\ReportingEngine\Core\Engine;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use Mostafax\ReportingEngine\Application\Services\RowLevelSecurityService;
 use Mostafax\ReportingEngine\Contracts\CacheManagerInterface;
 use Mostafax\ReportingEngine\Core\DSL\DslParser;
 use Mostafax\ReportingEngine\Core\DSL\QueryDefinition;
@@ -14,6 +15,7 @@ use Mostafax\ReportingEngine\Domain\Execution\ExecutionResult;
 use Mostafax\ReportingEngine\Domain\Report\Events\ReportExecuted;
 use Mostafax\ReportingEngine\Infrastructure\DataSources\DataSourceResolver;
 use Mostafax\ReportingEngine\Infrastructure\Security\FieldAccessControl;
+use Mostafax\ReportingEngine\Contracts\ReportEngineInterface;
 use Mostafax\ReportingEngine\Infrastructure\Security\QuerySanitizer;
 
 /**
@@ -29,16 +31,17 @@ use Mostafax\ReportingEngine\Infrastructure\Security\QuerySanitizer;
  *   7. Cache store
  *   8. Dispatch event
  */
-final class ReportEngine
+final class ReportEngine implements ReportEngineInterface
 {
     public function __construct(
-        private readonly DslParser            $parser,
-        private readonly QueryValidator       $validator,
-        private readonly QuerySanitizer       $sanitizer,
-        private readonly FieldAccessControl   $acl,
-        private readonly DataSourceResolver   $resolver,
-        private readonly CacheManagerInterface $cache,
-        private readonly Dispatcher           $events,
+        private readonly DslParser                  $parser,
+        private readonly QueryValidator             $validator,
+        private readonly QuerySanitizer             $sanitizer,
+        private readonly FieldAccessControl         $acl,
+        private readonly DataSourceResolver         $resolver,
+        private readonly CacheManagerInterface      $cache,
+        private readonly Dispatcher                 $events,
+        private readonly ?RowLevelSecurityService   $rls = null,
     ) {}
 
     /**
@@ -101,6 +104,10 @@ final class ReportEngine
 
         if (!empty($userRoles)) {
             $definition = $this->acl->withRoles(...$userRoles)->apply($definition);
+            // Step 4b: Row-level security — AND-merges role-based WHERE policies
+            if ($this->rls !== null) {
+                $definition = $this->rls->apply($definition, $userRoles);
+            }
         }
 
         return $definition;

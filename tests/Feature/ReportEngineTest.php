@@ -7,8 +7,6 @@ namespace Mostafax\ReportingEngine\Tests\Feature;
 use Mostafax\ReportingEngine\Core\DSL\DslParser;
 use Mostafax\ReportingEngine\Core\DSL\QueryDefinition;
 use Mostafax\ReportingEngine\Core\Validation\DslValidationException;
-use Mostafax\ReportingEngine\Core\Validation\QueryValidator;
-use Mostafax\ReportingEngine\Infrastructure\Builders\MySQLQueryBuilder;
 use Mostafax\ReportingEngine\Infrastructure\Builders\MongoAggregationBuilder;
 use Mostafax\ReportingEngine\Infrastructure\Security\FieldAccessControl;
 use Mostafax\ReportingEngine\Infrastructure\Security\QuerySanitizer;
@@ -37,7 +35,8 @@ final class ReportEngineTest extends TestCase
         $this->assertSame('orders', $definition->table);
         $this->assertCount(2, $definition->fields);
         $this->assertCount(2, $definition->aggregations);
-        $this->assertSame(['status'], $definition->groupBy);
+        $this->assertCount(1, $definition->groupBy);
+        $this->assertSame('status', $definition->groupBy[0]->column);
         $this->assertSame(1, $definition->pagination->page);
         $this->assertSame(25, $definition->pagination->perPage);
     }

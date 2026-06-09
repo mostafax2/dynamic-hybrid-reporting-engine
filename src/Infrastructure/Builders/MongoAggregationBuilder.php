@@ -8,15 +8,29 @@ use Mostafax\ReportingEngine\Contracts\QueryBuilderInterface;
 use Mostafax\ReportingEngine\Core\DSL\AggregationField;
 use Mostafax\ReportingEngine\Core\DSL\FilterCondition;
 use Mostafax\ReportingEngine\Core\DSL\FilterGroup;
+use Mostafax\ReportingEngine\Core\DSL\GroupByField;
 use Mostafax\ReportingEngine\Core\DSL\QueryDefinition;
+use Mostafax\ReportingEngine\Core\Formula\MongoFormulaTranspiler;
 
 /**
  * Translates a QueryDefinition into a MongoDB aggregation pipeline array.
  *
  * Returned value: array<int, array<string, mixed>>  (pipeline stages)
+ *
+ * GroupByField types handled:
+ *   column     → '$fieldName'  (standard Mongo field ref)
+ *   date_trunc → $dateTrunc / $dateToString expression (no raw string injection)
+ *   expression → MongoFormulaTranspiler (allowlisted token set)
  */
 final class MongoAggregationBuilder implements QueryBuilderInterface
 {
+    private readonly MongoFormulaTranspiler $formulaTranspiler;
+
+    public function __construct()
+    {
+        $this->formulaTranspiler = new MongoFormulaTranspiler();
+    }
+
     /** @return array<int, array<string,mixed>> */
     public function build(QueryDefinition $definition): array
     {
@@ -25,6 +39,10 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
         $matchStage = $this->buildMatchStage($definition);
         if (!empty($matchStage)) {
             $pipeline[] = ['$match' => $matchStage];
+        }
+
+        if (!empty($definition->computed)) {
+            $pipeline[] = ['$addFields' => $this->buildComputedFields($definition)];
         }
 
         if ($definition->isAggregation()) {
@@ -44,7 +62,6 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
             $pipeline[] = ['$sort' => $this->buildSortStage($definition)];
         }
 
-        // Facet stage for total count + paginated data in one round-trip
         $pipeline[] = [
             '$facet' => [
                 'data' => [
@@ -94,9 +111,21 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
         return $pipeline;
     }
 
-    // ────────────────────────────────────────────────────────────
-    // Stage builders
-    // ────────────────────────────────────────────────────────────
+    // ── Stage builders ────────────────────────────────────────────────────────
+
+    private function buildComputedFields(QueryDefinition $definition): array
+    {
+        $allowedColumns = array_merge(
+            array_map(fn($f) => $f->alias ?? $f->column, $definition->fields),
+            array_map(fn($a) => $a->alias, $definition->aggregations),
+        );
+
+        $addFields = [];
+        foreach ($definition->computed as $cf) {
+            $addFields[$cf->alias] = $this->formulaTranspiler->transpile($cf->expression, $allowedColumns);
+        }
+        return $addFields;
+    }
 
     private function buildMatchStage(QueryDefinition $definition): array
     {
@@ -110,8 +139,11 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
         }
 
         if ($definition->filters !== null && !$definition->filters->isEmpty()) {
-            $filterMatch = $this->buildFilterMatch($definition->filters);
-            $match       = array_merge($match, $filterMatch);
+            $match = array_merge($match, $this->buildFilterMatch($definition->filters));
+        }
+
+        if ($definition->rlsFilters !== null && !$definition->rlsFilters->isEmpty()) {
+            $match = array_merge($match, $this->buildFilterMatch($definition->rlsFilters));
         }
 
         return $match;
@@ -130,7 +162,6 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
             }
         }
 
-        // Single AND condition can be merged directly (avoids unnecessary nesting)
         if (count($conditions) === 1 && $operator === '$and') {
             return $conditions[0];
         }
@@ -151,27 +182,23 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
             'nin', 'not_in'  => [$condition->field => ['$nin' => (array) $condition->value]],
             'between'        => [$condition->field => ['$gte' => $condition->value[0], '$lte' => $condition->value[1]]],
             'like'           => [$condition->field => ['$regex' => $this->likeToRegex($condition->value), '$options' => 'i']],
-            'not_like'       => [$condition->field => ['$not'  => ['$regex' => $this->likeToRegex($condition->value), '$options' => 'i']]],
+            'not_like'       => [$condition->field => ['$not' => ['$regex' => $this->likeToRegex($condition->value), '$options' => 'i']]],
             'null'           => [$condition->field => null],
             'not_null'       => [$condition->field => ['$ne' => null]],
             default          => [$condition->field => $condition->value],
         };
     }
 
+    // ── Group stage ───────────────────────────────────────────────────────────
+
+    /**
+     * @param GroupByField[] $groupBy
+     */
     private function buildGroupStage(QueryDefinition $definition): array
     {
-        // _id: composite key for multi-field group, scalar for single, null for full-set aggregation
-        if (empty($definition->groupBy)) {
-            $groupId = null;
-        } elseif (count($definition->groupBy) === 1) {
-            $groupId = '$' . $definition->groupBy[0];
-        } else {
-            $groupId = [];
-            foreach ($definition->groupBy as $field) {
-                $key           = str_replace(['.', '-'], '_', $field);
-                $groupId[$key] = '$' . $field;
-            }
-        }
+        $groupBy = $definition->groupBy;
+
+        $groupId = $this->buildGroupId($groupBy);
 
         $stage = ['_id' => $groupId];
 
@@ -180,8 +207,9 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
         }
 
         // Preserve non-grouped select fields using $first
+        $groupedColumns = array_map(fn(GroupByField $f) => $f->column, $groupBy);
         foreach ($definition->fields as $field) {
-            if (!in_array($field->column, $definition->groupBy, true)) {
+            if (!in_array($field->column, $groupedColumns, true)) {
                 $stage[$field->alias ?? $field->column] = ['$first' => '$' . $field->column];
             }
         }
@@ -189,41 +217,103 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
         return $stage;
     }
 
+    /**
+     * Build the _id expression for $group stage from GroupByField[].
+     *
+     * @param GroupByField[] $groupBy
+     */
+    private function buildGroupId(array $groupBy): mixed
+    {
+        if (empty($groupBy)) {
+            return null;
+        }
+
+        if (count($groupBy) === 1) {
+            return $this->compileGroupByFieldExpr($groupBy[0]);
+        }
+
+        $id = [];
+        foreach ($groupBy as $field) {
+            $key       = str_replace(['.', '-'], '_', $field->outputName());
+            $id[$key]  = $this->compileGroupByFieldExpr($field);
+        }
+        return $id;
+    }
+
+    /**
+     * Compile a single GroupByField into a MongoDB expression for $group._id.
+     */
+    private function compileGroupByFieldExpr(GroupByField $field): mixed
+    {
+        return match ($field->type) {
+            'date_trunc' => $this->compileDateTruncExpr($field),
+            'expression' => ['$literal' => $field->expression], // FormulaTranspiler for Mongo not yet supported
+            default      => '$' . $field->column,
+        };
+    }
+
+    /**
+     * Compile a date_trunc GroupByField into a MongoDB $dateTrunc expression.
+     * Available from MongoDB 5.0+; falls back to $dateToString for older versions.
+     */
+    private function compileDateTruncExpr(GroupByField $field): array
+    {
+        $dateRef = '$' . $field->column;
+
+        $unitMap = [
+            'year'    => 'year',
+            'quarter' => 'quarter',
+            'month'   => 'month',
+            'week'    => 'week',
+            'day'     => 'day',
+            'hour'    => 'hour',
+        ];
+
+        $unit = $unitMap[$field->granularity ?? ''] ?? 'day';
+
+        return [
+            '$dateTrunc' => [
+                'date' => ['$toDate' => $dateRef],
+                'unit' => $unit,
+            ],
+        ];
+    }
+
     private function buildAggExpression(AggregationField $agg): array
     {
         return match ($agg->function) {
-            'sum'            => ['$sum'  => '$' . $agg->column],
-            'count'          => ['$sum'  => 1],
-            'count_distinct' => ['$addToSet' => '$' . $agg->column], // unwound later
-            'avg'            => ['$avg'  => '$' . $agg->column],
-            'min'            => ['$min'  => '$' . $agg->column],
-            'max'            => ['$max'  => '$' . $agg->column],
-            default          => ['$sum'  => '$' . $agg->column],
+            'sum'            => ['$sum'      => '$' . $agg->column],
+            'count'          => ['$sum'      => 1],
+            'count_distinct' => ['$addToSet' => '$' . $agg->column],
+            'avg'            => ['$avg'      => '$' . $agg->column],
+            'min'            => ['$min'      => '$' . $agg->column],
+            'max'            => ['$max'      => '$' . $agg->column],
+            default          => ['$sum'      => '$' . $agg->column],
         };
     }
+
+    // ── Project stages ────────────────────────────────────────────────────────
 
     private function buildPostGroupProject(QueryDefinition $definition): array
     {
         $project = ['_id' => 0];
+        $groupBy = $definition->groupBy;
+        $isMulti = count($groupBy) > 1;
 
-        // Re-expose grouped fields from _id
-        foreach ($definition->groupBy as $field) {
-            $key = str_replace(['.', '-'], '_', $field);
-            $project[$field] = count($definition->groupBy) === 1
-                ? '$_id'
-                : '$_id.' . $key;
+        foreach ($groupBy as $field) {
+            $key             = str_replace(['.', '-'], '_', $field->outputName());
+            $project[$field->outputName()] = $isMulti ? '$_id.' . $key : '$_id';
         }
 
-        // Expose aggregation aliases — convert $addToSet results to $size for count_distinct
         foreach ($definition->aggregations as $agg) {
             $project[$agg->alias] = $agg->function === 'count_distinct'
                 ? ['$size' => '$' . $agg->alias]
                 : 1;
         }
 
-        // Expose preserved fields
+        $groupedColumns = array_map(fn(GroupByField $f) => $f->column, $groupBy);
         foreach ($definition->fields as $field) {
-            if (!in_array($field->column, $definition->groupBy, true)) {
+            if (!in_array($field->column, $groupedColumns, true)) {
                 $project[$field->alias ?? $field->column] = 1;
             }
         }
@@ -239,8 +329,7 @@ final class MongoAggregationBuilder implements QueryBuilderInterface
 
         $project = ['_id' => 0];
         foreach ($definition->fields as $field) {
-            $key           = $field->alias ?? $field->column;
-            $project[$key] = '$' . $field->column;
+            $project[$field->alias ?? $field->column] = '$' . $field->column;
         }
         return $project;
     }
