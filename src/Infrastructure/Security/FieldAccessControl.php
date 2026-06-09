@@ -7,6 +7,7 @@ namespace Mostafax\ReportingEngine\Infrastructure\Security;
 use Mostafax\ReportingEngine\Core\DSL\AggregationField;
 use Mostafax\ReportingEngine\Core\DSL\FilterCondition;
 use Mostafax\ReportingEngine\Core\DSL\FilterGroup;
+use Mostafax\ReportingEngine\Core\DSL\GroupByField;
 use Mostafax\ReportingEngine\Core\DSL\QueryDefinition;
 use Mostafax\ReportingEngine\Core\DSL\SelectField;
 use Mostafax\ReportingEngine\Core\Validation\DslValidationException;
@@ -68,7 +69,7 @@ final class FieldAccessControl
             fields:       $this->filterSelectFields($definition->fields, $denied),
             aggregations: $this->filterAggregations($definition->aggregations, $denied),
             filters:      $definition->filters,
-            groupBy:      array_values(array_filter($definition->groupBy, fn(string $f) => !$this->isDenied($f, $denied))),
+            groupBy:      array_values(array_filter($definition->groupBy, fn(GroupByField $f) => $f->column === '' || !$this->isDenied($f->column, $denied))),
             orderBy:      array_values(array_filter($definition->orderBy, fn($o) => !$this->isDenied($o->column, $denied))),
             pagination:   $definition->pagination,
             joins:        $definition->joins,

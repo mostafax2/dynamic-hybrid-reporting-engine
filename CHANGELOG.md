@@ -5,6 +5,30 @@ All notable changes to `mostafax/dynamic-hybrid-reporting-engine` are documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2026-06-10
+
+### Added
+- Implement the missing `Core/Formula/` package that the engine already
+  depended on but which was never committed:
+  - `FormulaLexer` — tokenises computed-field formulas against a strict
+    character/keyword allowlist (the injection boundary; `;` `` ` `` `#` `|`
+    and any other unlisted character throw `FormulaParseException`).
+  - `FormulaParseException` — carries `position` and `expression`.
+  - `MySQLFormulaTranspiler` / `MongoFormulaTranspiler` — render SQL / Mongo
+    aggregation expressions **only** from the validated token stream; raw
+    user text never reaches output, and columns are checked against an
+    allowlist when supplied.
+  - `Core\DSL\ComputedField` DTO (`fromArray`/`toArray`), required by
+    `DslParser::parseComputed()`.
+- 15 unit tests for the transpilers (arithmetic, precedence, functions,
+  allowlist enforcement, and injection rejection).
+
+### Fixed
+- `FieldAccessControl::apply()` crashed with a `TypeError` when filtering
+  group-by fields: the closure type-hinted `string` but `groupBy` holds
+  `GroupByField` objects (since the typed-DSL change in `e7f150f`). It now
+  filters on `GroupByField::$column`.
+
 ## [0.1.0] - 2026-06-10
 
 ### Fixed
