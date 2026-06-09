@@ -5,6 +5,15 @@ All notable changes to `mostafax/dynamic-hybrid-reporting-engine` are documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-06-10
+
+### Fixed
+- `JoinClause` was missing the `alias` property that both
+  `MySQLQueryBuilder::applyJoins()` (`table as alias`) and
+  `QuerySanitizer` already referenced — reading it raised an
+  `Undefined property` warning. Added `alias` to the DTO and its
+  `fromArray()`; the sanitizer's existing `assertIdentifier` guards it.
+
 ## [0.2.0] - 2026-06-10
 
 ### Added

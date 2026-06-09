@@ -14,6 +14,7 @@ final readonly class JoinClause
         public string  $first,
         public string  $operator,
         public ?string $second = null,
+        public ?string $alias = null,
     ) {
         if (!in_array(strtolower($this->type), self::TYPES, true)) {
             throw new \InvalidArgumentException("Unknown join type: {$this->type}");
@@ -28,6 +29,7 @@ final readonly class JoinClause
             first:    (string) ($data['first'] ?? throw new \InvalidArgumentException('Join requires first column')),
             operator: (string) ($data['operator'] ?? '='),
             second:   isset($data['second']) ? (string) $data['second'] : null,
+            alias:    isset($data['alias']) ? (string) $data['alias'] : null,
         );
     }
 }
