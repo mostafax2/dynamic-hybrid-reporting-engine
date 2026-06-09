@@ -13,6 +13,7 @@ use Mostafax\ReportingEngine\Application\Services\ReportService;
 use Mostafax\ReportingEngine\Contracts\CacheManagerInterface;
 use Mostafax\ReportingEngine\Contracts\ReportRepositoryInterface;
 use Mostafax\ReportingEngine\Core\DSL\DslParser;
+use Mostafax\ReportingEngine\Contracts\ReportEngineInterface;
 use Mostafax\ReportingEngine\Core\Engine\ReportEngine;
 use Mostafax\ReportingEngine\Core\Validation\QueryValidator;
 use Mostafax\ReportingEngine\Exporters\CsvExporter;
@@ -95,6 +96,8 @@ final class ReportingEngineServiceProvider extends ServiceProvider
                 events:    $app->make(Dispatcher::class),
             );
         });
+
+        $this->app->alias(ReportEngine::class, ReportEngineInterface::class);
     }
 
     private function registerInfrastructure(): void
